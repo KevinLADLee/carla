@@ -115,6 +115,8 @@ private:
   PID SpeedController = PID(0.15f, 0.0f, 0.25f);
   PID AccelerationController = PID(0.01f, 0.0f, 0.01f);
 
+  bool bPureAccControl = false;
+
   FVehicleAckermannControl UserTargetPoint;
 
   // Target point after aplying restrictions

@@ -50,6 +50,12 @@ void FAckermannController::SetTargetPoint(const FVehicleAckermannControl& Ackerm
   TargetAcceleration = FMath::Abs(UserTargetPoint.Acceleration);
   TargetJerk = FMath::Abs(UserTargetPoint.Jerk);
 
+  constexpr float VelocityInf = 999.9f;
+  if(FMath::Abs(TargetSpeed) > VelocityInf){
+      TargetAcceleration = UserTargetPoint.Acceleration;
+  }
+
+
 }
 
 void FAckermannController::Reset() {
@@ -116,9 +122,10 @@ void FAckermannController::RunControlSteering() {
 
 bool FAckermannController::RunControlFullStop() {
   // From this velocity on full brake is turned on
-  float FullStopEpsilon = 0.1; //[m/s]
+  float FullStopEpsilon = 0.5; //[m/s]
 
   if (FMath::Abs(VehicleSpeed) < FullStopEpsilon && FMath::Abs(UserTargetPoint.Speed) < FullStopEpsilon) {
+    UE_LOG(LogCarla, Log, TEXT("Debug: Full Stop!"));
     Brake = 1.0;
     Throttle = 0.0;
     return true;
@@ -128,24 +135,24 @@ bool FAckermannController::RunControlFullStop() {
 
 void FAckermannController::RunControlReverse() {
   // From this position on it is allowed to switch to reverse gear
-  float StandingStillEpsilon = 0.1;  // [m/s]
+  // constexpr float StandingStillEpsilon = 0.5;  // [m/s]
 
-  if (FMath::Abs(VehicleSpeed) < StandingStillEpsilon) {
+  // if (FMath::Abs(VehicleSpeed) < StandingStillEpsilon) {
     // Standing still, change of driving direction allowed
     if (UserTargetPoint.Speed < 0) {
-      // Change of driving direction to reverse.
       bReverse = true;
+      // Change of driving direction to reverse.
     } else if (UserTargetPoint.Speed >= 0) {
       // Change of driving direction to forward.
       bReverse = false;
     }
-  } else {
-    if (FMath::Sign(VehicleSpeed) * FMath::Sign(UserTargetPoint.Speed) == -1) {
-      // Requested for change of driving direction.
-      // First we have to come to full stop before changing driving direction
-      TargetSpeed = 0.0;
-    }
-  }
+  // } else {
+  //   if (FMath::Sign(VehicleSpeed) * FMath::Sign(UserTargetPoint.Speed) == -1) {
+  //     // Requested for change of driving direction.
+  //     // First we have to come to full stop before changing driving direction
+  //     TargetSpeed = 0.0;s
+  //   }
+  // }
 
 }
 
@@ -167,9 +174,22 @@ void FAckermannController::RunControlSpeed() {
 }
 
 void FAckermannController::RunControlAcceleration() {
+
+  constexpr float VelocityInf = 999.9f;
+  if(FMath::Abs(TargetSpeed) > VelocityInf){
+    // if(bReverse){
+      SpeedControlAccelTarget = TargetAcceleration;
+    // }else{
+      // SpeedControlAccelTarget = TargetAcceleration;
+    // }
+  }
+
   AccelerationController.SetTargetPoint(SpeedControlAccelTarget);
   AccelControlPedalDelta = AccelerationController.Run(VehicleAcceleration, DeltaTime);
 
+  
+  UE_LOG(LogCarla, Log, TEXT("target: %f, acc_delta: %f "), SpeedControlAccelTarget, AccelControlPedalDelta);
+  UE_LOG(LogCarla, Log, TEXT("Curacc: %f"), VehicleAcceleration)
   // Clipping borders
   AccelControlPedalTarget += AccelControlPedalDelta;
   AccelControlPedalTarget = FMath::Clamp(AccelControlPedalTarget, -1.0f, 1.0f);
@@ -177,7 +197,6 @@ void FAckermannController::RunControlAcceleration() {
 }
 
 void FAckermannController::UpdateVehicleControlCommand() {
-
   if (AccelControlPedalTarget < 0.0f) {
     if (bReverse) {
       Throttle = FMath::Abs(AccelControlPedalTarget);
