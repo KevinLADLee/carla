@@ -113,6 +113,7 @@ void FVehicleData::RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* Carla
   {
     SpeedLimit = Controller->GetSpeedLimit();
   }
+  FailureState = Vehicle->GetFailureState();
 }
 
 void FVehicleData::RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode)
@@ -130,7 +131,7 @@ void FVehicleData::RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* Carl
   {
     Vehicle->ApplyVehicleControl(Control, EVehicleInputPriority::Client);
   }
-  else 
+  else
   {
     Vehicle->ApplyVehicleAckermannControl(AckermannControl, EVehicleInputPriority::Client);
   }
@@ -140,6 +141,7 @@ void FVehicleData::RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* Carl
   {
     Controller->SetSpeedLimit(SpeedLimit);
   }
+  Vehicle->SetFailureState(FailureState);
 }
 
 void FWalkerData::RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode)

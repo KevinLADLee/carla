@@ -72,6 +72,8 @@ public:
 
   float SpeedLimit = 30;
 
+  carla::rpc::VehicleFailureState FailureState;
+
   virtual void RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode) override;
 
   virtual void RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode) override;

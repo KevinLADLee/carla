@@ -33,6 +33,7 @@
 
 #include <utility>
 
+#include "carla/rpc/VehicleFailureState.h"
 #include "CarlaWheeledVehicle.generated.h"
 
 class UBoxComponent;
@@ -189,6 +190,8 @@ public:
   void SetWheelCollisionNW(UWheeledVehicleMovementComponentNW *VehicleNW, const FVehiclePhysicsControl &PhysicsControl);
 
   void SetVehicleLightState(const FVehicleLightState &LightState);
+
+  void SetFailureState(const carla::rpc::VehicleFailureState &FailureState);
 
   UFUNCTION(BlueprintNativeEvent)
   bool IsTwoWheeledVehicle();
@@ -350,6 +353,9 @@ private:
 
   float RolloverBehaviorForce = 0.35;
   int RolloverBehaviorTracker = 0;
+  float RolloverFlagTime = 5.0f;
+
+  carla::rpc::VehicleFailureState FailureState = carla::rpc::VehicleFailureState::None;
 
 public:
 
@@ -384,6 +390,10 @@ public:
   UPROPERTY(Category="CARLA Wheeled Vehicle", VisibleAnywhere)
   bool bIsNWVehicle = false;
 
+  void SetRolloverFlag();
+
+  carla::rpc::VehicleFailureState GetFailureState() const;
+
 private:
 
   UPROPERTY(Category="CARLA Wheeled Vehicle", VisibleAnywhere)
@@ -413,4 +423,5 @@ private:
 
   void CheckRollover(const float roll, const std::pair<float, float> threshold_roll);
 
+  FTimerHandle TimerHandler;
 };
