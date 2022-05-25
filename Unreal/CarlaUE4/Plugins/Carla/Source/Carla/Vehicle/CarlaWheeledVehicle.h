@@ -165,6 +165,10 @@ public:
     return AckermannController.GetSettings();
   }
 
+  FAckermannControlInfo GetAckermannControlInfo() const {
+    return AckermannController.GetAckermannControlInfo();
+  }
+
   UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
   void RestoreVehiclePhysicsControl();
 

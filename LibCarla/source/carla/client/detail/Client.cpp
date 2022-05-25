@@ -11,6 +11,7 @@
 #include "carla/client/FileTransfer.h"
 #include "carla/client/TimeoutException.h"
 #include "carla/rpc/AckermannControllerSettings.h"
+#include "carla/rpc/AckermannControlInfo.h"
 #include "carla/rpc/ActorDescription.h"
 #include "carla/rpc/BoneTransformDataIn.h"
 #include "carla/rpc/Client.h"
@@ -433,6 +434,11 @@ namespace detail {
   rpc::AckermannControllerSettings Client::GetAckermannControllerSettings(
       rpc::ActorId vehicle) const {
     return _pimpl->CallAndWait<carla::rpc::AckermannControllerSettings>("get_ackermann_controller_settings", vehicle);
+  }
+
+  rpc::AckermannControlInfo Client::GetAckermannControlInfo(
+      rpc::ActorId vehicle) const {
+    return _pimpl->CallAndWait<carla::rpc::AckermannControlInfo>("get_ackermann_control_info", vehicle);
   }
 
   void Client::ApplyAckermannControllerSettings(rpc::ActorId vehicle, const rpc::AckermannControllerSettings &settings) {

@@ -126,6 +126,26 @@ namespace rpc {
     return out;
   }
 
+  std::ostream &operator<<(std::ostream &out, const AckermannControlInfo &info) {
+    out << "AckermannControlInfo(target_steer=" << std::to_string(info.target_steer)
+           << ", target_steer_speed=" << std::to_string(info.target_steer_speed)
+           << ", target_speed=" << std::to_string(info.target_speed)
+           << ", target_acceleration=" << std::to_string(info.target_acceleration)
+           << ", target_jerk=" << std::to_string(info.target_jerk)
+           << ", current_steer=" << std::to_string(info.current_steer)
+           << ", current_speed=" << std::to_string(info.current_speed)
+           << ", current_acceleration=" << std::to_string(info.current_acceleration)
+           << ", speed_pid_delta=" << std::to_string(info.speed_pid_delta)
+           << ", speed_pid_target=" << std::to_string(info.speed_pid_target)
+           << ", accel_pid_delta=" << std::to_string(info.accel_pid_delta)
+           << ", accel_pid_target=" << std::to_string(info.accel_pid_target)
+           << ", output_steer=" << std::to_string(info.output_steer)
+           << ", output_throttle=" << std::to_string(info.output_throttle)
+           << ", output_brake=" << std::to_string(info.output_brake)
+           << ')';
+    return out;
+  }
+
 } // namespace rpc
 } // namespace carla
 
@@ -371,6 +391,43 @@ void export_control() {
     .def("__ne__", &cr::AckermannControllerSettings::operator!=)
     .def(self_ns::str(self_ns::self))
   ;
+
+  class_<cr::AckermannControlInfo>("AckermannControlInfo")
+      .def(init<float, float, float, float, float, float, float, float, float, float, float, float, float, float>(
+          (arg("target_steer") = 0.0f,
+           arg("target_steer_speed") = 0.0f,
+           arg("target_speed") = 0.0f,
+           arg("target_acceleration") = 0.0f,
+          //  arg("target_jerk") = 0.0f,
+           arg("current_steer") = 0.0f,
+           arg("current_speed") = 0.0f,
+           arg("current_acceleration") = 0.0f,
+           arg("speed_pid_delta") = 0.0f,
+           arg("speed_pid_target") = 0.0f,
+           arg("accel_pid_delta") = 0.0f,
+           arg("accel_pid_target") = 0.0f,
+           arg("output_steer") = 0.0f,
+           arg("output_throttle") = 0.0f,
+           arg("output_brake") = 0.0f)))
+      .def_readwrite("target_steer", &cr::AckermannControlInfo::target_steer)
+      .def_readwrite("target_steer_speed", &cr::AckermannControlInfo::target_steer_speed)
+      .def_readwrite("target_speed", &cr::AckermannControlInfo::target_speed)
+      .def_readwrite("target_acceleration", &cr::AckermannControlInfo::target_acceleration)
+      // .def_readwrite("target_jerk", &cr::AckermannControlInfo::target_jerk)
+      .def_readwrite("current_steer", &cr::AckermannControlInfo::current_steer)
+      .def_readwrite("current_speed", &cr::AckermannControlInfo::current_speed)
+      .def_readwrite("current_acceleration", &cr::AckermannControlInfo::current_acceleration)
+      .def_readwrite("speed_pid_delta", &cr::AckermannControlInfo::speed_pid_delta)
+      .def_readwrite("speed_pid_target", &cr::AckermannControlInfo::speed_pid_target)
+      .def_readwrite("accel_pid_delta", &cr::AckermannControlInfo::accel_pid_delta)
+      .def_readwrite("accel_pid_target", &cr::AckermannControlInfo::accel_pid_target)
+      .def_readwrite("output_steer", &cr::AckermannControlInfo::output_steer)
+      .def_readwrite("output_throttle", &cr::AckermannControlInfo::output_throttle)
+      .def_readwrite("output_brake", &cr::AckermannControlInfo::output_brake)
+      .def("__eq__", &cr::AckermannControlInfo::operator==)
+      .def("__ne__", &cr::AckermannControlInfo::operator!=)
+      .def(self_ns::str(self_ns::self))
+      ;
 
   class_<cr::WalkerControl>("WalkerControl")
     .def(init<cg::Vector3D, float, bool>(

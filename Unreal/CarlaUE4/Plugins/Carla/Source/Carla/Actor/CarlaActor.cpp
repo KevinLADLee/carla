@@ -874,6 +874,25 @@ ECarlaServerResponse FVehicleActor::GetVehicleAckermannControl(FVehicleAckermann
   return ECarlaServerResponse::Success;
 }
 
+ECarlaServerResponse FVehicleActor::GetAckermannControlInfo(FAckermannControlInfo& AckermannControlInfo)
+{
+  if (IsDormant())
+  {
+    FVehicleData* ActorData = GetActorData<FVehicleData>();
+    AckermannControlInfo = ActorData->AckermannControlInfo;
+  }
+  else
+  {
+    auto Vehicle = Cast<ACarlaWheeledVehicle>(GetActor());
+    if (Vehicle == nullptr)
+    {
+      return ECarlaServerResponse::NotAVehicle;
+    }
+    AckermannControlInfo = Vehicle->GetAckermannControlInfo();
+  }
+  return ECarlaServerResponse::Success;
+}
+
 ECarlaServerResponse FVehicleActor::GetAckermannControllerSettings(
   FAckermannControllerSettings& AckermannSettings)
 {

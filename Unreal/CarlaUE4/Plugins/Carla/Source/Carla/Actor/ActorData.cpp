@@ -104,6 +104,7 @@ void FVehicleData::RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* Carla
   }
   Control = Vehicle->GetVehicleControl();
   AckermannControl = Vehicle->GetVehicleAckermannControl();
+  AckermannControlInfo =  Vehicle->GetAckermannControlInfo();
   bAckermannControlActive = Vehicle->IsAckermannControlActive();
   AckermannControllerSettings = Vehicle->GetAckermannControllerSettings();
   LightState = Vehicle->GetVehicleLightState();

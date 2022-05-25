@@ -29,6 +29,7 @@
 #include <compiler/disable-ue4-macros.h>
 #include <carla/Functional.h>
 #include <carla/Version.h>
+#include <carla/rpc/AckermannControlInfo.h>
 #include <carla/rpc/AckermannControllerSettings.h>
 #include <carla/rpc/Actor.h>
 #include <carla/rpc/ActorDefinition.h>
@@ -1425,6 +1426,32 @@ void FCarlaServer::FPimpl::BindActions()
           " Actor Id: " + FString::FromInt(ActorId));
     }
     return cr::AckermannControllerSettings(Settings);
+  };
+
+  // TODO: AckermannControlInfo
+  BIND_SYNC(get_ackermann_control_info) << [this](
+      cr::ActorId ActorId) -> R<cr::AckermannControlInfo>
+  {
+    REQUIRE_CARLA_EPISODE();
+    FCarlaActor* CarlaActor = Episode->FindCarlaActor(ActorId);
+    if (!CarlaActor)
+    {
+      return RespondError(
+          "get_ackermann_controller_settings",
+          ECarlaServerResponse::ActorNotFound,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    FAckermannControlInfo ControlInfo;
+    ECarlaServerResponse Response =
+        CarlaActor->GetAckermannControlInfo(ControlInfo);
+    if (Response != ECarlaServerResponse::Success)
+    {
+      return RespondError(
+          "get_ackermann_controller_settings",
+          Response,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    return cr::AckermannControlInfo(ControlInfo);
   };
 
   BIND_SYNC(apply_ackermann_controller_settings) << [this](

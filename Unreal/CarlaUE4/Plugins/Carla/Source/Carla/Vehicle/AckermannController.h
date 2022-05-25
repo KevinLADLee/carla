@@ -77,6 +77,30 @@ class PID
     float LastInput = 0.0f;
 };
 
+struct FAckermannControlInfo{
+  
+  float TargetSteer = 0.0;
+  float TargetSteerSpeed = 0.0;
+  float TargetSpeed = 0.0;
+  float TargetAcceleration = 0.0;
+  float TargetJerk = 0.0;
+
+  float CurrentSteer = 0.0f;             // [rad]
+  float CurrentSpeed = 0.0f;             // [m/s]
+  float CurrentAcceleration = 0.0f;      // [m/s2]
+
+  float SpeedPidDelta = 0.0f;
+  float SpeedPidTarget = 0.0f;
+
+  float AccelPidDelta = 0.0f;
+  float AccelPidTarget = 0.0f;
+
+  float OutputSteer = 0.0f;
+  float OutputThrottle = 0.0f;
+  float OutputBrake = 0.0f;
+
+
+};
 
 class FAckermannController
 {
@@ -89,6 +113,8 @@ public:
 
   FAckermannControllerSettings GetSettings() const;
   void ApplySettings(const FAckermannControllerSettings& Settings);
+
+  FAckermannControlInfo GetAckermannControlInfo() const;
 
   void UpdateVehicleState(const ACarlaWheeledVehicle* Vehicle);
   void UpdateVehiclePhysics(const ACarlaWheeledVehicle* Vehicle);
@@ -155,4 +181,6 @@ private:
 
   float LastVehicleSpeed = 0.0f;         // [m/s]
   float LastVehicleAcceleration = 0.0f;  // [m/s2]
+
+  const float VelocityInf = 999.9f;
 };

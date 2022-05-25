@@ -9,6 +9,7 @@
 #include "Math/DVector.h"
 #include "Carla/Vehicle/AckermannControllerSettings.h"
 #include "Carla/Vehicle/VehicleAckermannControl.h"
+#include "Carla/Vehicle/AckermannController.h"
 #include "Carla/Vehicle/VehicleControl.h"
 #include "Carla/Vehicle/VehicleLightState.h"
 #include "Vehicle/VehicleInputPriority.h"
@@ -60,6 +61,8 @@ public:
   FVehicleControl Control;
 
   FVehicleAckermannControl AckermannControl;
+
+  FAckermannControlInfo AckermannControlInfo;
 
   bool bAckermannControlActive = false;
 

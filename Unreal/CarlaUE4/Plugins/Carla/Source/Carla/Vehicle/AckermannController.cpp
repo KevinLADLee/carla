@@ -41,20 +41,39 @@ void FAckermannController::ApplySettings(const FAckermannControllerSettings& Set
   AccelerationController.Kd = Settings.AccelKd;
 }
 
+FAckermannControlInfo FAckermannController::GetAckermannControlInfo() const{
+  
+  FAckermannControlInfo control_info;
+  control_info.TargetSteer = TargetSteer;
+  control_info.TargetSteerSpeed = TargetSteerSpeed;
+  control_info.TargetSpeed = TargetSpeed;
+  control_info.TargetAcceleration = TargetAcceleration;
+  control_info.TargetJerk = TargetJerk;
+  control_info.CurrentSteer = VehicleSteer;
+  control_info.CurrentSpeed = VehicleSpeed;
+  control_info.CurrentAcceleration = VehicleAcceleration;
+  control_info.OutputSteer = Steer;
+  control_info.OutputBrake = Brake;
+  control_info.OutputThrottle = Throttle;
+
+  return control_info;
+}
+
+
 void FAckermannController::SetTargetPoint(const FVehicleAckermannControl& AckermannControl) {
   UserTargetPoint = AckermannControl;
 
   TargetSteer = FMath::Clamp(UserTargetPoint.Steer, -VehicleMaxSteering, VehicleMaxSteering);
   TargetSteerSpeed = FMath::Abs(UserTargetPoint.SteerSpeed);
   TargetSpeed = UserTargetPoint.Speed;
-  TargetAcceleration = FMath::Abs(UserTargetPoint.Acceleration);
-  TargetJerk = FMath::Abs(UserTargetPoint.Jerk);
 
-  constexpr float VelocityInf = 999.9f;
   if(FMath::Abs(TargetSpeed) > VelocityInf){
-      TargetAcceleration = UserTargetPoint.Acceleration;
+    TargetAcceleration = UserTargetPoint.Acceleration;
+  }else{
+    TargetAcceleration = FMath::Abs(UserTargetPoint.Acceleration);
   }
 
+  TargetJerk = FMath::Abs(UserTargetPoint.Jerk);
 
 }
 
@@ -175,7 +194,7 @@ void FAckermannController::RunControlSpeed() {
 
 void FAckermannController::RunControlAcceleration() {
 
-  constexpr float VelocityInf = 999.9f;
+
   if(FMath::Abs(TargetSpeed) > VelocityInf){
     // if(bReverse){
       SpeedControlAccelTarget = TargetAcceleration;

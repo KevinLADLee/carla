@@ -300,6 +300,11 @@ public:
     return ECarlaServerResponse::ActorTypeMismatch;
   }
 
+  virtual ECarlaServerResponse GetAckermannControlInfo(FAckermannControlInfo&)
+  {
+    return ECarlaServerResponse::ActorTypeMismatch;
+  }
+
   virtual ECarlaServerResponse GetAckermannControllerSettings(FAckermannControllerSettings&)
   {
     return ECarlaServerResponse::ActorTypeMismatch;
@@ -501,6 +506,8 @@ public:
   virtual ECarlaServerResponse GetVehicleControl(FVehicleControl&) final;
 
   virtual ECarlaServerResponse GetVehicleAckermannControl(FVehicleAckermannControl&) final;
+
+  virtual ECarlaServerResponse GetAckermannControlInfo(FAckermannControlInfo&) final;
 
   virtual ECarlaServerResponse GetAckermannControllerSettings(FAckermannControllerSettings&) final;
 

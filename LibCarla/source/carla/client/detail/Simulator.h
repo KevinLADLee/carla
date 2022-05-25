@@ -465,6 +465,10 @@ namespace detail {
       return _client.GetAckermannControllerSettings(vehicle.GetId());
     }
 
+    rpc::AckermannControlInfo GetAckermannControlInfo(const Vehicle &vehicle) const {
+      return _client.GetAckermannControlInfo(vehicle.GetId());
+    }
+
     void ApplyAckermannControllerSettings(Vehicle &vehicle, const rpc::AckermannControllerSettings &settings) {
       _client.ApplyAckermannControllerSettings(vehicle.GetId(), settings);
     }

@@ -63,6 +63,10 @@ namespace client {
     return GetEpisode().Lock()->GetAckermannControllerSettings(*this);
   }
 
+  rpc::AckermannControlInfo Vehicle::GetAckermannControlInfo() const {
+    return GetEpisode().Lock()->GetAckermannControlInfo(*this);
+  }
+
   void Vehicle::ApplyAckermannControllerSettings(const rpc::AckermannControllerSettings &settings) {
     GetEpisode().Lock()->ApplyAckermannControllerSettings(*this, settings);
   }

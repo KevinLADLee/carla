@@ -8,6 +8,7 @@
 
 #include "carla/client/Actor.h"
 #include "carla/rpc/AckermannControllerSettings.h"
+#include "carla/rpc/AckermannControlInfo.h"
 #include "carla/rpc/TrafficLightState.h"
 #include "carla/rpc/VehicleAckermannControl.h"
 #include "carla/rpc/VehicleControl.h"
@@ -62,6 +63,9 @@ namespace client {
 
     /// Apply Ackermann control settings to this vehicle
     void ApplyAckermannControllerSettings(const rpc::AckermannControllerSettings &settings);
+
+    /// Return Ackermann control info of this vehicle
+    rpc::AckermannControlInfo GetAckermannControlInfo() const;
 
     /// Apply physics control to this vehicle.
     void ApplyPhysicsControl(const PhysicsControl &physics_control);
