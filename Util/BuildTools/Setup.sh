@@ -139,11 +139,11 @@ for PY_VERSION in ${PY_VERSION_LIST[@]} ; do
     BOOST_PACKAGE_BASENAME=boost_${BOOST_VERSION//./_}
 
     log "Retrieving boost."
-    wget "https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
+    wget -c "https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
     # try to use the backup boost we have in Jenkins
     if [[ ! -f "${BOOST_PACKAGE_BASENAME}.tar.gz" ]] ; then
       log "Using boost backup"
-      wget "https://carla-releases.s3.eu-west-3.amazonaws.com/Backup/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
+      wget -c "https://carla-releases.s3.eu-west-3.amazonaws.com/Backup/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
     fi
 
     log "Extracting boost for Python ${PY_VERSION}."
@@ -413,7 +413,7 @@ if [[ -d ${LIBPNG_INSTALL} ]] ; then
   log "Libpng already installed."
 else
   log "Retrieving libpng."
-  wget ${LIBPNG_REPO}
+  wget -c ${LIBPNG_REPO}
 
   log "Extracting libpng."
   tar -xf libpng-${LIBPNG_VERSION}.tar.xz
@@ -448,7 +448,7 @@ if [[ -d ${XERCESC_INSTALL_DIR} ]] ; then
   log "Xerces-c already installed."
 else
   log "Retrieving xerces-c."
-  wget ${XERCESC_REPO}
+  wget -c ${XERCESC_REPO}
 
   log "Extracting xerces-c."
   tar -xzf ${XERCESC_BASENAME}.tar.gz
@@ -497,7 +497,7 @@ if ${USE_CHRONO} ; then
     log "Eigen already installed."
   else
     log "Retrieving Eigen."
-    wget ${EIGEN_REPO}
+    wget -c ${EIGEN_REPO}
 
     log "Extracting Eigen."
     tar -xzf ${EIGEN_BASENAME}.tar.gz
@@ -575,7 +575,7 @@ if [[ -d ${SQLITE_INSTALL_DIR} ]] ; then
   log "Sqlite already installed."
 else
   log "Retrieving Sqlite3"
-  wget ${SQLITE_REPO}
+  wget -c ${SQLITE_REPO}
 
   log "Extracting Sqlite3"
   tar -xzf ${SQLITE_TAR}
@@ -616,7 +616,7 @@ if [[ -d ${PROJ_INSTALL_DIR} ]] ; then
   log "PROJ already installed."
 else
   log "Retrieving PROJ"
-  wget ${PROJ_REPO}
+  wget -c ${PROJ_REPO}
 
   log "Extracting PROJ"
   tar -xzf ${PROJ_TAR}
@@ -666,7 +666,7 @@ if [[ -d ${PATCHELF_INSTALL_DIR} ]] ; then
   log "Patchelf already installed."
 else
   log "Retrieving patchelf"
-  wget ${PATCHELF_REPO}
+  wget -c ${PATCHELF_REPO}
 
   log "Extracting patchelf"
   tar -xzf ${PATCHELF_TAR}
